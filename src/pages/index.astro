@@ -1,5 +1,7 @@
 ---
 const title = "Notitas para mi estimada";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const imagePath = `${base}/images/isa.jpeg`;
 ---
 
 <html lang="es">
@@ -17,7 +19,7 @@ const title = "Notitas para mi estimada";
         <h1>Notitas para mi estimada</h1>
 
         <div class="photo-container">
-          <img src={`${import.meta.env.BASE_URL}/images/isa.jpeg`} alt="Foto de nosotros" />
+          <img src={imagePath} alt="Foto de nosotros" />
         </div>
 
         <div class="message-box">
