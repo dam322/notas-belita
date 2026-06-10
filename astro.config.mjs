@@ -3,6 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dam322.github.io',
-  base: '/notas-belita',
+    site: 'https://notas-belita.netlify.app'
 });

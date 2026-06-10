@@ -1,70 +1,160 @@
 ---
-const title = "Notitas para mi estimada";
-const baseUrl = import.meta.env.BASE_URL.endsWith("/")
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
+const title = "Noticas para ti";
 
-const imagePath = `${baseUrl}images/isa.jpeg`;
+// Como estás en Netlify, esta ruta funciona bien si la imagen está en public/images/isa.jpeg
+const imagePath = "/images/isa.jpeg";
+
+const messages = [
+  "Me gustan altas, delgadas y rubias",		
+  "Te daría el último bocado de Sushi",
+  "Me gusta que contigo puedo ser medio bobo sin sentirme tan bobo.",
+  "Me gustas más de lo que quiero admitir para no verme tan intenso.",
+  "Eres mi notificación favorita. Y eso que yo ignoro casi todo.",
+  "Contigo hasta no hacer nada se siente como buen plan.",
+  "Me gustas en modo linda, en modo seria y en modo tengo hambre no me hables.",
+  "Me gustas como canción que uno dice que no va a repetir y termina escuchando todo el día.",
+  "Tú tienes algo. No sé bien qué es, pero me tiene aquí haciendo una página rosada.",
+  "Si algún día me hago el interesante, no me creas mucho. Me gustas bastante.",
+  "Me gusta estar contigo porque no tengo que fingir tanto. Solo finjo que no estoy tan tragado.",
+  "Si fueras una canción de noche, serías de esas que uno escucha y se queda pensando.",
+  "Me gustas, pero no de forma elegante. Más bien de forma obvia.",
+  "No eres perfecta, y menos mal. Así me gustas más.",
+  "Contigo me dan ganas de hacer planes, y eso en mí ya es bastante romántico.",
+  "Me caes bien, me gustas y encima estás linda. Muy abusiva de tu parte.",
+  "Me gustas como para mandarte canciones y luego decir que no era indirecta.",
+  "Me gusta que seas tú. Simplemente tú.",
+  "Tú eres como ese pedacito de canción que uno espera porque es el mejor.",
+  "No prometo ser perfecto, pero sí molestarte con cariño y quererte bonito.",
+  "Me gusta cuando hablamos de cualquier bobada y aun así me quedo feliz.",
+  "Eres mi plan favorito, incluso cuando el plan es improvisado y medio caótico.",
+ 
+];
 ---
 
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="App de noticas recargada."
+    />
+
+    <meta property="og:title" content="Noticas para ti" />
+    <meta
+      property="og:description"
+      content="Una mini app innecesariamente rosada."
+    />
+    <meta property="og:type" content="website" />
     <title>{title}</title>
+
+    <link rel="icon" type="image/svg+xml" href="/noteicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <main class="page">
-      <section class="card">
-        <p class="small-text">Especialmente para vuestra merced</p>
+      <div class="background-decoration decoration-one"></div>
+      <div class="background-decoration decoration-two"></div>
+      <div class="background-decoration decoration-three"></div>
 
-        <h1>Notitas para mi estimada</h1>
-
-        <div class="photo-container">
-          <img src="images/isa.jpeg" alt="Foto de nosotros" />
-        </div>
-
-        <div class="message-box">
-          <p id="loveMessage">
-            Presiona el botón para recibir una notita.
+      <section class="app-card">
+        <div class="card-header">
+          <span class="tag">Una app de notas demasiado pinky</span>
+          <h1>Noticas para ti</h1>
+          <p class="subtitle">
+            Toca el botón. Me puse cursi.
           </p>
         </div>
 
-        <button id="changeMessageBtn">
-          Notita nueva
+        <figure class="polaroid">
+          <div class="photo-wrapper">
+            <img src={imagePath} alt="Foto de nosotros" />
+          </div>
+          <figcaption>mi foto favorita (la única)</figcaption>
+        </figure>
+
+        <section class="note-area" aria-live="polite">
+          <span class="note-label" id="noteCounter">Notica #0</span>
+
+          <div class="message-box">
+            <span class="quote-mark">“</span>
+            <p id="loveMessage">
+              Presiona el botón y deja que esta página haga su intento.
+            </p>
+          </div>
+        </section>
+
+        <button id="changeMessageBtn" class="message-button">
+          Dame una notica 💌
         </button>
+
+        <p class="footer-text">
+          hecha con cariño, especialmente para vuestra merced.
+        </p>
       </section>
     </main>
 
-    <script>
-      const messages = [
-        "Eres mi lugar favorito en el mundo.",
-        "Cada día contigo se siente más bonito.",
-        "Tu sonrisa tiene el poder de mejorar cualquier día.",
-        "Gracias por existir y por hacer mi vida más feliz.",
-        "Me encantas más de lo que las palabras pueden explicar.",
-        "Si pudiera elegir otra vez, te volvería a elegir a ti.",
-        "Contigo todo se siente más tranquilo, más bonito y más real.",
-        "Eres mi pensamiento favorito del día.",
-        "No necesito un día especial para recordarte cuánto te amo.",
-        "Tú haces que las cosas simples se vuelvan mágicas."
-      ];
-
+    <script define:vars={{ messages }}>
       const messageElement = document.getElementById("loveMessage");
       const button = document.getElementById("changeMessageBtn");
+      const noteCounter = document.getElementById("noteCounter");
 
-      button?.addEventListener("click", () => {
-        const randomIndex = Math.floor(Math.random() * messages.length);
-        if (messageElement) {
+      let currentIndex = -1;
+      let totalClicks = 0;
+
+      function getRandomMessageIndex() {
+        if (messages.length === 1) return 0;
+
+        let randomIndex;
+
+        do {
+          randomIndex = Math.floor(Math.random() * messages.length);
+        } while (randomIndex === currentIndex);
+
+        return randomIndex;
+      }
+
+      function changeMessage() {
+        const randomIndex = getRandomMessageIndex();
+
+        currentIndex = randomIndex;
+        totalClicks++;
+
+		button.textContent = totalClicks === 1 ? "Otra, otra 💌" : "Otra notica 💌";
+
+        messageElement.classList.remove("show-message");
+
+        setTimeout(() => {
           messageElement.textContent = messages[randomIndex];
-        }
-      });
+          noteCounter.textContent = `Notica #${totalClicks}`;
+          messageElement.classList.add("show-message");
+        }, 150);
+      }
+
+      button.addEventListener("click", changeMessage);
     </script>
   </body>
 </html>
 
 <style>
+  :root {
+    --pink-bg: #ffd6e8;
+    --pink-soft: #ffeaf2;
+    --pink-light: #fff6fa;
+    --pink-main: #e75480;
+    --pink-dark: #9d315b;
+    --text-main: #532236;
+    --text-soft: #9b5c73;
+    --white: #ffffff;
+    --shadow: rgba(137, 45, 85, 0.22);
+  }
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -72,119 +162,273 @@ const imagePath = `${baseUrl}images/isa.jpeg`;
   }
 
   body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #ffd1dc, #ffb6c1, #ffc0cb);
     min-height: 100vh;
+    font-family: "Nunito", Arial, sans-serif;
+    color: var(--text-main);
+    background:
+      radial-gradient(circle at top left, #fff7fb 0, transparent 35%),
+      linear-gradient(135deg, #ffd6e8 0%, #ffc1d8 45%, #fff0f6 100%);
+    overflow-x: hidden;
   }
 
   .page {
+    position: relative;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 24px;
+    display: grid;
+    place-items: center;
+    padding: 32px 18px;
   }
 
-  .card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(255, 255, 255, 0.82);
-    border-radius: 28px;
-    padding: 32px 24px;
+  .background-decoration {
+    position: fixed;
+    border-radius: 999px;
+    filter: blur(4px);
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .decoration-one {
+    width: 180px;
+    height: 180px;
+    background: #ffffff;
+    top: 8%;
+    left: 7%;
+  }
+
+  .decoration-two {
+    width: 240px;
+    height: 240px;
+    background: #ff9fbd;
+    right: -70px;
+    top: 18%;
+  }
+
+  .decoration-three {
+    width: 180px;
+    height: 180px;
+    background: #fff8fb;
+    bottom: 8%;
+    left: -50px;
+  }
+
+  .app-card {
+    position: relative;
+    width: min(100%, 440px);
+    padding: 30px 22px 24px;
     text-align: center;
-    box-shadow: 0 18px 40px rgba(180, 80, 120, 0.28);
-    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 34px;
+    background: rgba(255, 248, 251, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      0 24px 70px var(--shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(18px);
   }
 
-  .small-text {
-    color: #b84f7a;
-    font-size: 14px;
-    margin-bottom: 8px;
-    font-weight: 600;
+  .card-header {
+    margin-bottom: 22px;
+  }
+
+  .tag {
+    display: inline-flex;
+    padding: 7px 13px;
+    margin-bottom: 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--pink-dark);
+    background: rgba(255, 214, 232, 0.8);
   }
 
   h1 {
-    color: #8f2d56;
-    font-size: 32px;
-    margin-bottom: 24px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(34px, 8vw, 46px);
+    line-height: 1;
+    margin-bottom: 10px;
+    color: var(--pink-dark);
+    letter-spacing: -0.03em;
   }
 
-  .photo-container {
-    width: 220px;
-    height: 220px;
+  .subtitle {
+    max-width: 320px;
+    margin: 0 auto;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 700;
+  }
+
+  .polaroid {
+    width: min(100%, 280px);
     margin: 0 auto 24px;
-    border-radius: 50%;
-    padding: 8px;
-    background: #ffffff;
-    box-shadow: 0 12px 28px rgba(143, 45, 86, 0.25);
+    padding: 12px 12px 18px;
+    border-radius: 12px;
+    background: var(--white);
+    box-shadow: 0 18px 38px rgba(113, 37, 71, 0.2);
+    transform: rotate(-2deg);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
-  .photo-container img {
+  .polaroid:hover {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow: 0 22px 44px rgba(113, 37, 71, 0.25);
+  }
+
+  .photo-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--pink-soft);
+  }
+
+  .photo-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
     display: block;
   }
 
+  .polaroid figcaption {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 800;
+  }
+
+  .note-area {
+    margin-bottom: 20px;
+  }
+
+  .note-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--pink-dark);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
   .message-box {
-    min-height: 120px;
-    background: #fff5f8;
-    border-radius: 20px;
-    padding: 22px;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ffd6e4;
+    position: relative;
+    min-height: 130px;
+    padding: 28px 22px 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #fff8fb 0%, #ffeef5 100%);
+    border: 1px dashed rgba(217, 79, 125, 0.35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 10px 24px rgba(168, 67, 109, 0.11);
+  }
+
+  .quote-mark {
+    position: absolute;
+    top: -5px;
+    left: 18px;
+    color: rgba(217, 79, 125, 0.18);
+    font-family: Georgia, serif;
+    font-size: 76px;
+    line-height: 1;
   }
 
   .message-box p {
-    color: #7a2848;
+    position: relative;
+    color: var(--text-main);
     font-size: 18px;
-    line-height: 1.5;
-    font-weight: 500;
+    line-height: 1.45;
+    font-weight: 800;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
   }
 
-  button {
-    background: #e75480;
-    color: white;
+  .message-box p:not(.show-message) {
+    opacity: 0.78;
+  }
+
+  .message-box p.show-message {
+    animation: messageIn 0.35s ease both;
+  }
+
+  .message-button {
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+    padding: 15px 22px;
     border: none;
     border-radius: 999px;
-    padding: 14px 28px;
+    color: white;
+    background: linear-gradient(135deg, #e75480 0%, #c93d6c 100%);
+    font-family: "Nunito", Arial, sans-serif;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 900;
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 10px 22px rgba(231, 84, 128, 0.35);
+    box-shadow: 0 14px 26px rgba(217, 79, 125, 0.35);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      filter 0.18s ease;
   }
 
-  button:hover {
-    background: #d84373;
+  .message-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 26px rgba(231, 84, 128, 0.45);
+    box-shadow: 0 18px 30px rgba(217, 79, 125, 0.42);
+    filter: brightness(1.02);
   }
 
-  button:active {
+  .message-button:active {
     transform: scale(0.97);
   }
 
+  .footer-text {
+    margin-top: 18px;
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  @keyframes messageIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
   @media (max-width: 480px) {
-    .card {
-      padding: 28px 18px;
+    .page {
+      padding: 22px 14px;
     }
 
-    h1 {
-      font-size: 28px;
+    .app-card {
+      padding: 26px 16px 22px;
+      border-radius: 28px;
     }
 
-    .photo-container {
-      width: 190px;
-      height: 190px;
+    .polaroid {
+      width: min(100%, 250px);
+    }
+
+    .message-box {
+      min-height: 140px;
+      padding: 26px 18px 22px;
     }
 
     .message-box p {
       font-size: 17px;
+    }
+
+    .footer-text {
+      font-size: 12px;
     }
   }
 </style>
